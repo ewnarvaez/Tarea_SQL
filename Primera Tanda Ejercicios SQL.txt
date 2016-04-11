@@ -1,0 +1,51 @@
+
+Ejercicios SQL Primera Tanda:
+
+/* Los países mas grandes del mundo */
+
+SELECT `country`.`Name` AS "Pais", `country`.`SurfaceArea` AS "Tamaño" 
+FROM `country` 
+ORDER BY `country`.`SurfaceArea` DESC
+
+/* Los 10 países mas grandes del mundo */
+
+SELECT `country`.`Name` AS "Pais", `country`.`SurfaceArea` AS "Tamaño" 
+FROM `country` 
+ORDER BY `country`.`SurfaceArea` DESC 
+LIMIT 10
+
+/* Los 10 países mas ricos del mundo */
+
+SELECT `country`.`Name` AS "Pais", `country`.`GNP` AS "Riqueza" 
+FROM `country` 
+ORDER BY `country`.`GNP` DESC 
+LIMIT 10
+
+/* Los 10 países mas ricos con el PIB per Cápita */
+
+SELECT `country`.`Name` AS "Pais", (`country`.`GNP` / `country`.`Population`) AS "PIB Per Cápita" 
+FROM `country` 
+ORDER BY 2 DESC 
+LIMIT 10
+
+/* Los 5 países con mayor expectativa de vida */
+
+SELECT `country`.`Name` AS "Pais", `country`.`LifeExpectancy` AS "Expectativa de vida" 
+FROM `country` 
+ORDER BY 2 DESC 
+LIMIT 5
+
+/* El PIB de cada continente */
+
+SELECT `country`.`Continent`,
+SUM(`country`.`GNP`) AS "PIB"
+FROM `country`
+GROUP BY `country`.`Continent`
+ORDER BY 2 DESC
+
+/* Los 10 países más pequeños del mundo */
+
+SELECT `country`.`Name` AS "Pais", `country`.`SurfaceArea` AS "Tamaño" 
+FROM `country` 
+ORDER BY `country`.`SurfaceArea` 
+LIMIT 10
