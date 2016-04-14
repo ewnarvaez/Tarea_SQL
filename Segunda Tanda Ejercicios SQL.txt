@@ -1,0 +1,81 @@
+
+
+Ejercicios SQL Segunda Tanda:
+
+/* Los países mas grandes del mundo con nombre de 6 letras */
+
+SELECT `country`.`Name` AS "Pais", `country`.`SurfaceArea` AS "Tamaño" 
+FROM `country` 
+WHERE `country`.`Name` LIKE '______'
+ORDER BY `country`.`SurfaceArea` DESC
+
+/* El país más rico en cada continente */
+
+(SELECT `country`.`Continent` AS "Continente", `country`.`Name` AS "Pais Más Rico", country.GNP AS "Riqueza"
+FROM `country` 
+GROUP BY `country`.`Continent`, country.GNP
+HAVING country.GNP IN (SELECT MAX(`country`.`GNP`) FROM country GROUP BY country.Continent) AND country.GNP > 0
+ORDER BY 3 DESC)
+UNION
+(SELECT `country`.`Continent` AS "Continente", `country`.`Name` AS "Pais Más Rico", country.GNP AS "Riqueza"
+FROM `country` 
+GROUP BY `country`.`Continent`, country.GNP
+HAVING country.GNP IN (SELECT MIN(`country`.`GNP`) FROM country GROUP BY country.Continent) 
+ORDER BY 2, 1 ASC 
+LIMIT 1)
+
+/* El país mas pobre de cada continente */
+
+SELECT `country`.`Continent` AS "Continente", `country`.`Name` AS "Pais Más Pobre", `country`.`GNP` AS "Riqueza"
+FROM `country` 
+GROUP BY `country`.`Continent`, `country`.`GNP`
+HAVING `country`.`GNP` IN (SELECT MIN(`country`.`GNP`) FROM `country` GROUP BY `country`.`Continent`) 
+ORDER BY 2
+
+/* El país más chico de cada continente */
+
+SELECT `country`.`Continent` AS "Continente", `country`.`Name` AS "Pais Más Chico", `country`.`SurfaceArea` AS "Tamaño en Km2"
+FROM `country` 
+GROUP BY `country`.`Continent`, `country`.`SurfaceArea`
+HAVING `country`.`SurfaceArea` IN (SELECT MIN(`country`.`SurfaceArea`) FROM `country` GROUP BY `country`.`Continent`) 
+ORDER BY 3 DESC
+
+/* El país más grande de cada continente */
+
+SELECT `country`.`Continent` AS "Continente", `country`.`Name` AS "Pais Más Grande", `country`.`SurfaceArea` AS "Tamaño en Km2"
+FROM `country` 
+GROUP BY `country`.`Continent`, `country`.`SurfaceArea`
+HAVING `country`.`SurfaceArea` IN (SELECT MAX(`country`.`SurfaceArea`) FROM `country` GROUP BY `country`.`Continent`) 
+ORDER BY 3 DESC
+
+/* Los países con mejor expectativa de vida independizados en el siglo 20 */
+
+SELECT `country`.`Name` AS "Pais", `country`.`LifeExpectancy` AS "Expectativa de vida", 
+`country`.`IndepYear` AS "Año de Independencia" 
+FROM `country` 
+WHERE `country`.`IndepYear` >= 1900
+ORDER BY 2 DESC
+
+/* Los países con peor expectativa de vida independizados en el siglo 20 */
+
+SELECT `country`.`Name` AS "Pais", `country`.`LifeExpectancy` AS "Expectativa de vida", 
+`country`.`IndepYear` AS "Año de Independencia" 
+FROM `country` 
+WHERE `country`.`IndepYear` >= 1900
+ORDER BY 2
+
+/* Los países con mejor expectativa de vida sin independizarse aun */
+
+SELECT `country`.`Name` AS "Pais", `country`.`LifeExpectancy` AS "Expectativa de vida", 
+`country`.`IndepYear` AS "Año de Independencia" 
+FROM `country` 
+WHERE country.IndepYear IS NULL 
+ORDER BY 2 DESC
+
+/* Los países, no americanos, con mejor expectativa de vida */
+
+SELECT `country`.`Name` AS "Pais", `country`.`LifeExpectancy` AS "Expectativa de vida", `country`.`Continent`
+FROM `country` 
+WHERE country.Continent NOT IN ("North America", "South America", "Central America")
+ORDER BY 2 DESC
+
